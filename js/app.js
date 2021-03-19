@@ -22,7 +22,7 @@ for(i=0;i<names.length;i++)
 {
  new proMall(names[i]);
 }
-console.table(proMall.allObj);
+//console.table(proMall.allObj);
 
 function rand(min,max){
 return Math.floor(Math.random()*(max-min+1))+min;
@@ -34,46 +34,68 @@ function render()
     leftimg.src=leftRandomProduct.path;
     leftimg.title=leftRandomProduct.name;
     leftimg.alt=leftRandomProduct.name;
-    console.log(leftimg);
+    //console.log(leftimg);
     let centerIndex = rand(0,proMall.allObj.length - 1);
     let centerRandomProduct=proMall.allObj[centerIndex];
     centerimg.src=centerRandomProduct.path;
     centerimg.title=centerRandomProduct.name;
     centerimg.alt=centerRandomProduct.name;
-    console.log(centerimg);
+    //console.log(centerimg);
     let rightIndex = rand(0,proMall.allObj.length - 1);
     let rightRandomProduct=proMall.allObj[rightIndex];
     rightimg.src=rightRandomProduct.path;
     rightimg.title=rightRandomProduct.name;
     rightimg.alt=rightRandomProduct.name;
-    console.log(rightimg);
+    //console.log(rightimg);
 }
 imgSection.addEventListener('click',ch)
+let numberOfClicks =25;
 function ch(event){
+    numberOfClicks--;
     event.preventDefault();
-    console.log(proMall.allObj) ;
+   // console.log(proMall.allObj) ;
     if(event.target.id !== 'imgSection' )
+  
     {
         for(let i=0; i<proMall.allObj.length;i++){
+              proMall.allObj[i].viwe++;
             if(proMall.allObj[i].name===event.target.title){
                 proMall.allObj[i].vote++;
-                console.table(proMall.allObj[i]);
+                console.table(proMall.allObj[i].vote);
             }
         }
         render();
     
     }
+    if(numberOfClicks==0){
+        imgSection.removeEventListener('click',ch)
+        chart();
+    }
+
 }
 
 render();
 var ctx = document.getElementById('myChart');
+let productName =[];
+let productVote=[];
+let prodctViwe=[];
+for(let i=0 ;i<proMall.allObj.length;i++)
+{
+    productName.push(proMall.allObj[i].name);
+    productVote.push(proMall.allObj[i].vote);
+    prodctViwe.push(proMall.allObj[i].viwe);
+}
+console.log(productName);
+console.log(productVote);
+function chart(){
 var myChart = new Chart(ctx, {
+    
     type: 'bar',
     data: {
-        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],// product name
+        labels:productName,// product name
         datasets: [{
             label: '# of Votes',
-            data: [12, 19, 3, 5, 2, 3],//number of votes for every product
+            data: productVote,//number of votes for every product
             backgroundColor: [
                 'rgba(255, 99, 132, 0.2)',
                 'rgba(54, 162, 235, 0.2)',
@@ -102,4 +124,4 @@ var myChart = new Chart(ctx, {
             }]
         }
     }
-});
+});}
